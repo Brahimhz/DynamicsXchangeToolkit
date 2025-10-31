@@ -94,7 +94,14 @@ var app = await applicationService.RetrieveWithNavigationBatchByPredicateAsync(
     sp,
     a => a.Investor.CrmId == investorId
          && a.CbQuotations.Any(q => q.StatusCode == (int)QuotationStatus.Submitted));
+
+// Example: resolve services dynamically with the factory
+var factory = serviceProvider.GetRequiredService<IGenericCrmServiceFactory>();
+var contactService = factory.Get<Contact>();
+var contact = await contactService.RetrieveAsync(contactId);
 ```
+
+`GenericCrmServiceFactory` acts as a thin wrapper over the DI container so you can resolve `IGenericCrmService<T>` when `T` is only known at runtime (for example, inside navigation-loading routines or generic business logic). If you know the concrete entity type at compile time, prefer constructor-injecting `IGenericCrmService<T>` directly for that class. Use the factory when you need late-bound access to the toolkit for multiple entity types without enumerating every generic variation ahead of time.
 
 ---
 
