@@ -121,6 +121,39 @@ var app = await applicationService.RetrieveWithNavigationBatchByPredicateAsync(
 
 ---
 
+## Dependency Injection Setup
+
+Register the toolkit services in your application startup so they can be resolved from DI for any POCO entity:
+
+```csharp
+// Register ServiceClient (singleton)
+builder.Services.AddSingleton<ServiceClient>(sp =>
+{
+	var configuration = sp.GetRequiredService<IConfiguration>();
+	var connectionString = configuration.GetSection("Dynamics365:ConnectionString").Value;
+	return new ServiceClient(connectionString);
+});
+
+// Register the open generic for all POCOs using the interface
+builder.Services.AddScoped(typeof(IGenericCrmService<>), typeof(GenericCrmService<>));
+builder.Services.AddScoped<IGenericCrmServiceFactory, GenericCrmServiceFactory>();
+```
+
+`GenericCrmServiceFactory` (implemented in `GenericCrmService.cs`) wraps the DI container and exposes a single `Get<T>()` method. This allows you to resolve `IGenericCrmService<T>` for any entity type at runtime without knowing the generic type argument at compile time.
+
+---
+
+## Required Packages
+
+Install the following NuGet packages in your project before referencing the toolkit:
+
+- `Microsoft.PowerPlatform.Dataverse.Client`
+- `Microsoft.Extensions.DependencyInjection.Abstractions`
+
+These dependencies provide the Dataverse `ServiceClient` and the DI primitives used by the toolkit. Add them via `dotnet add package` or your IDE's NuGet package manager.
+
+---
+
 ## FAQ
 
 **Q: Can I use this with any CRM entity?**
