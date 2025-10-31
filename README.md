@@ -20,24 +20,24 @@
 ### [CrmTable]
 Marks a class as a CRM table and provides the logical table name.
 ```csharp
-[CrmTable("adio_esp_applications")]
-public class Application { ... }
+[CrmTable("tablea")]
+public class Table_A { ... }
 ```
 
 
 ### [CrmColumn]
 Maps a property to a CRM column (logical name).
 ```csharp
-[CrmColumn("adio_esp_applicationsid")]
-public Guid CRM_AppId { get; set; }
+[CrmColumn("tableaid")]
+public Guid CRM_Table_A_Id { get; set; }
 ```
 
 
 ### [CrmForeignKey]
 Indicates a property is a foreign key to another entity type.
 ```csharp
-[CrmForeignKey(typeof(ApplicationState))]
-public Guid StateId { get; set; }
+[CrmForeignKey(typeof(Table_B))]
+public Guid Table_B_Id { get; set; }
 ```
 
 ---
@@ -72,12 +72,7 @@ public Guid StateId { get; set; }
 	> 4. **Efficiency:**
 	>    - All navigation loading is done in batches (not one-by-one), minimizing CRM round-trips.
 	>    - The recursion is depth-first, so all levels of navigation are loaded as needed, but never repeated for the same type in the same chain.
-	>
-	> **Example:**
-	> - If you load an Application, and Application has a collection of CbQuotations, and each CbQuotation has a reference back to Application, the loader will:
-	>   - Load the Application.
-	>   - Load all CbQuotations for that Application.
-	>   - For each CbQuotation, see the Application reference, but since Application is already in the processed set, it will not reload or recurse further, preventing an infinite loop.
+
 
 ---
 ## Predicate Translation & Joins
