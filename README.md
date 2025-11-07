@@ -78,27 +78,27 @@ public Guid Table_B_Id { get; set; }
 ## Predicate Translation & Joins
 
 - **Server-Side Filtering**: Methods like `RetrieveAllAsync(predicate)` and `RetrieveWithNavigationBatchByPredicateAsync` turn your LINQ expression into CRM `ConditionExpression` and `LinkEntity` objects; data is filtered inside Dataverse, not in memory.
-- **Navigation Joins**: Expressions that touch navigation properties (e.g. `app.State.StatusCode == 1`) automatically create the required joins and translate into the target entity's logical columns.
-- **Collection Support**: `.Any()` on collection navigations is supported and scoped to the related `LinkEntity`, letting you write filters such as `app.CbQuotations.Any(q => q.Amount > threshold)`.
+- **Navigation Joins**: Expressions that touch navigation properties (e.g. `tableA.StateColumn.StatusCode == 1`) automatically create the required joins and translate into the target entity's logical columns.
+- **Collection Support**: `.Any()` on collection navigations is supported and scoped to the related `LinkEntity`, letting you write filters such as `tableA.RelatedTableBs.Any(b => b.Amount > threshold)`.
 - **Pattern Coverage**: Equality/inequality, comparison operators, null checks, `Contains`, `StartsWith`, `EndsWith`, and `Not` are converted to their Dataverse equivalents.
 - **Current Limitations**: `OR` spanning different navigation paths and attribute-to-attribute comparisons are not supported; keep complex disjunctions within the same navigation scope.
 
 ### Under the hood
 
 - **LinkJoinTranslator** walks the expression tree after any lightweight rewrites and emits the Dataverse `QueryExpression` structure. It discovers which navigation paths the filter touches, materializes the required `LinkEntity` chain for each path, and attaches the translated conditions to the right `FilterExpression` scope so the query executes server-side.
-- **NavToFkRewriter** runs first and simplifies common root-level navigation comparisons. When it sees a safe pattern such as `app.Investor.CrmId == investorId`, it rewrites it to the foreign key (`app.InvestorId == investorId`), reducing the amount of joins the translator has to add. It skips non-nullable FK null checks so join-based existence filters continue to behave correctly.
+- **NavToFkRewriter** runs first and simplifies common root-level navigation comparisons. When it sees a safe pattern such as `tableA.RelatedTableB.TableBId == relatedTableBId`, it rewrites it to the foreign key (`tableA.RelatedTableBId == relatedTableBId`), reducing the amount of joins the translator has to add. It skips non-nullable FK null checks so join-based existence filters continue to behave correctly.
 
 ```csharp
-// Example: fetch first application with a submitted quotation from a specific investor
-var app = await applicationService.RetrieveWithNavigationBatchByPredicateAsync(
-    sp,
-    a => a.Investor.CrmId == investorId
-         && a.CbQuotations.Any(q => q.StatusCode == (int)QuotationStatus.Submitted));
+// Example: fetch the first TableA row with a submitted related TableC record from a specific TableB
+var tableARecord = await tableAService.RetrieveWithNavigationBatchByPredicateAsync(
+	sp,
+	a => a.RelatedTableB.TableBId == relatedTableBId
+		 && a.RelatedTableCs.Any(c => c.StatusCode == (int)TableCStatus.Submitted));
 
 // Example: resolve services dynamically with the factory
 var factory = serviceProvider.GetRequiredService<IGenericCrmServiceFactory>();
-var contactService = factory.Get<Contact>();
-var contact = await contactService.RetrieveAsync(contactId);
+var tableBService = factory.Get<TableB>();
+var tableB = await tableBService.RetrieveAsync(tableBId);
 ```
 
 `GenericCrmServiceFactory` acts as a thin wrapper over the DI container so you can resolve `IGenericCrmService<T>` when `T` is only known at runtime (for example, inside navigation-loading routines or generic business logic). If you know the concrete entity type at compile time, prefer constructor-injecting `IGenericCrmService<T>` directly for that class. Use the factory when you need late-bound access to the toolkit for multiple entity types without enumerating every generic variation ahead of time.
