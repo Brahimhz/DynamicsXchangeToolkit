@@ -1,6 +1,6 @@
 # DynamicsXchangeToolkit
 
-`DynamicsXchangeToolkit` is a reusable .NET library that packages the `GenericCrmService<T>` primitive together with helper attributes and utilities for Microsoft Dataverse (Dynamics 365/CRM). It targets any POCO entity decorated with `[CrmTable]`, `[CrmColumn]`, and `[CrmForeignKey]` attributes and surfaces rich CRUD plus navigation-loading support on top of the Power Platform Dataverse `ServiceClient`.
+`DynamicsXchangeToolkit` is a reusable .NET library that packages the `GenericCrmService<T>` primitive together with helper attributes and utilities for Microsoft Dataverse (Dynamics 365/CRM). It targets any POCO entity decorated with `[CrmTable]`, `[CrmColumn]`, and `[CrmForeignKey]` attributes and surfaces rich CRUD plus navigation-loading support on top of the Power Platform Dataverse `ServiceClient`. The library builds against `.NET 8.0`.
 
 ---
 
