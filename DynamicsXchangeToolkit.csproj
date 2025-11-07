@@ -16,16 +16,20 @@
     <RepositoryType>git</RepositoryType>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/Brahimhz/DynamicsXchangeToolkit</PackageProjectUrl>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
+  <PackageReadmeFile>README.md</PackageReadmeFile>
+  <PackageIcon>DynamicsXchangeToolkit_128x128.png</PackageIcon>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+    <PackageReleaseNotes>Initial preview: generic Dataverse CRUD service, navigation loading, DI helpers, and sample tests.</PackageReleaseNotes>
+    <Copyright>Copyright (c) Brahim HZ 2025</Copyright>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.PowerPlatform.Dataverse.Client" Version="1.2.10" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.10" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Tests\**" />
@@ -34,5 +38,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" Pack="true" PackagePath="" />
+    <None Include="DynamicsXchangeToolkit_128x128.png" Pack="true" PackagePath="" />
   </ItemGroup>
 </Project>
