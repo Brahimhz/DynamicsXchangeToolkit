@@ -7,7 +7,7 @@
     <AssemblyName>DynamicsXchangeToolkit</AssemblyName>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);CS1591</NoWarn>
-  <Version>0.1.0</Version>
+  <Version>0.1.1</Version>
     <Authors>Brahim HZ</Authors>
     <Company>Brahim HZ</Company>
     <Description>Reusable Dataverse generic CRM service with attribute-driven mapping, navigation loading, and predicate translation capabilities.</Description>
@@ -23,7 +23,8 @@
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
-    <PackageReleaseNotes>Initial preview: generic Dataverse CRUD service, navigation loading, DI helpers, and sample tests.</PackageReleaseNotes>
+  <PackageReleaseNotes>0.1.1: OptionSetValue conversion fix in GenericCrmService.ToPOCO.
+0.1.0: Initial preview with CRUD, navigation loading, DI helpers, and sample tests.</PackageReleaseNotes>
     <Copyright>Copyright (c) Brahim HZ 2025</Copyright>
   </PropertyGroup>
   <ItemGroup>
