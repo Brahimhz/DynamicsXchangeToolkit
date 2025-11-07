@@ -829,6 +829,25 @@ public class GenericCrmService<T> : IGenericCrmService<T> where T : class, new()
                     else if (prop.PropertyType == typeof(string))
                         prop.SetValue(poco, er.Id.ToString());
                 }
+                else if (value is OptionSetValue optionSet)
+                {
+                    if (prop.PropertyType.IsAssignableFrom(typeof(OptionSetValue)))
+                    {
+                        prop.SetValue(poco, optionSet);
+                    }
+                    else
+                    {
+                        var targetType = Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType;
+                        if (targetType.IsEnum)
+                        {
+                            prop.SetValue(poco, Enum.ToObject(targetType, optionSet.Value));
+                        }
+                        else
+                        {
+                            prop.SetValue(poco, Convert.ChangeType(optionSet.Value, targetType));
+                        }
+                    }
+                }
                 else
                 {
                     var targetType = Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType;
